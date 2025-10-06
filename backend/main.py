@@ -56,7 +56,8 @@ def list_tasks(db: Session = Depends(get_db)):
 def create_company(company: dict, db: Session = Depends(get_db)):
     new_company = models.Company(
         name=company["name"],
-        point_of_contact=company.get("point_of_contact")
+        point_of_contact=company.get("point_of_contact"),
+        address=company.get("address")
     )
     db.add(new_company)
     db.commit()

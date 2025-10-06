@@ -1,6 +1,6 @@
 import { ActionIcon, Loader, Table, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { IconArrowLeft } from '@tabler/icons-react';
+import { IconArrowRight } from '@tabler/icons-react';
 
 export default function CompaniesTable() {
 	const [companies, setCompanies] = useState([]);
@@ -25,13 +25,17 @@ export default function CompaniesTable() {
       <Table.Td>{company.name}</Table.Td>
       <Table.Td>{company.address}</Table.Td>
       <Table.Td>{company.point_of_contact}</Table.Td>
+			<Table.Td>{company.last_updated}</Table.Td>
+			<Table.Td>{company.last_updated_by}</Table.Td>
 			<Table.Td>
 				<ActionIcon
-					color="blue"
-					radius="xl"
-					variant="filled"
+					variant="subtle"
+					color="grey"
+					onClick={() => {
+						window.location.href = `/companies/${company.id}`;
+					}}
 				>
-					<IconArrowLeft />
+					<IconArrowRight />
 				</ActionIcon>
 			</Table.Td>
     </Table.Tr>
@@ -47,6 +51,8 @@ export default function CompaniesTable() {
 							<Table.Th>Name</Table.Th>
 							<Table.Th>Address</Table.Th>
 							<Table.Th>Point of contact</Table.Th>
+							<Table.Th>Last updated</Table.Th>
+							<Table.Th>Last updated by</Table.Th>
 							<Table.Th>Actions</Table.Th>
 						</Table.Tr>
 					</Table.Thead>

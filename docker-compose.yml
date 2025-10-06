@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: myapp-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: myapp
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build: ./backend
+    container_name: myapp-backend
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: mysql+pymysql://myuser:mypassword@db:3306/myapp
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    container_name: myapp-frontend
+    restart: always
+    ports:
+      - "3000:5173"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

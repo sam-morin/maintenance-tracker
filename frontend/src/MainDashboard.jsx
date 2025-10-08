@@ -27,7 +27,7 @@ export default function MainDashboard() {
 	};
 
 	return (
-		<>
+		<div style={{ padding: '1rem' }}>
 			<Title order={1}>Main Dashboard</Title>
 			<SimpleGrid cols={2} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
 				<Stack>
@@ -36,16 +36,20 @@ export default function MainDashboard() {
 					</Title>
 					<TextInput 
 						placeholder="Company Name"
+						autoFocus
+						variant="filled"
 						value={newCompany.name}
 						onChange={(e) => setNewCompany({ ...newCompany, name: e.target.value })}
 					/>
 					<TextInput 
 						placeholder="Address"
 						value={newCompany.address}
+						variant="filled"
 						onChange={(e) => setNewCompany({ ...newCompany, address: e.target.value })}
 					/>
 					<TextInput 
 						placeholder="Point of Contact"
+						variant="filled"
 						value={newCompany.point_of_contact}
 						onChange={(e) => setNewCompany({ ...newCompany, point_of_contact: e.target.value })}
 					/>
@@ -63,6 +67,6 @@ export default function MainDashboard() {
 					</Title>
 				</Box>
 			</SimpleGrid>
-		</>
+		</div>
 	);
 }

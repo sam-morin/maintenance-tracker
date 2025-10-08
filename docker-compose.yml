@@ -23,6 +23,7 @@ services:
       - db
     environment:
       DATABASE_URL: mysql+pymysql://myuser:mypassword@db:3306/myapp
+      PYTHONUNBUFFERED: 1
     ports:
       - "8000:8000"
 

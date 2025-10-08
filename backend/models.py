@@ -1,3 +1,4 @@
+import uuid
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum, Text
 from sqlalchemy.orm import relationship, declarative_base
 import enum
@@ -21,7 +22,7 @@ class Frequency(enum.Enum):
 class Company(Base):
     __tablename__ = "companies"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     name = Column(String(255), unique=True, nullable=False)
     address = Column(String(255))
     point_of_contact = Column(String(255))
@@ -30,7 +31,11 @@ class Company(Base):
 
     # Relationships
     assignments = relationship("CompanyTaskAssignment", back_populates="company")
-    cycles = relationship("MaintenanceCycle", back_populates="company")
+    cycles = relationship(
+        "MaintenanceCycle",
+        back_populates="company",
+        cascade="all, delete-orphan"
+    )
 
 
 class Task(Base):
@@ -39,7 +44,7 @@ class Task(Base):
     """
     __tablename__ = "tasks"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     name = Column(String(255), unique=True, nullable=False)
     description = Column(Text)
     documentation_link = Column(String(255))
@@ -61,9 +66,9 @@ class CompanyTaskAssignment(Base):
     """
     __tablename__ = "company_task_assignments"
 
-    id = Column(Integer, primary_key=True, index=True)
-    company_id = Column(Integer, ForeignKey("companies.id"), nullable=False)
-    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    company_id = Column(String(36), ForeignKey("companies.id"), nullable=False)
+    task_id = Column(String(36), ForeignKey("tasks.id"), nullable=False)
 
     company = relationship("Company", back_populates="assignments")
     task = relationship("Task", back_populates="assignments")
@@ -83,8 +88,8 @@ class MaintenanceCycle(Base):
     """
     __tablename__ = "maintenance_cycles"
 
-    id = Column(Integer, primary_key=True, index=True)
-    company_id = Column(Integer, ForeignKey("companies.id"), nullable=False)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    company_id = Column(String(36), ForeignKey("companies.id", ondelete="CASCADE"), nullable=False)
     start_date = Column(DateTime, nullable=False)
     end_date = Column(DateTime, nullable=False)
     frequency = Column(Enum(Frequency), nullable=False)
@@ -103,10 +108,10 @@ class TaskInstance(Base):
     """
     __tablename__ = "task_instances"
 
-    id = Column(Integer, primary_key=True, index=True)
-    assignment_id = Column(Integer, ForeignKey("company_task_assignments.id"), nullable=False)
-    cycle_id = Column(Integer, ForeignKey("maintenance_cycles.id"), nullable=False)
-    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=False)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    assignment_id = Column(String(36), ForeignKey("company_task_assignments.id"), nullable=False)
+    cycle_id = Column(String(36), ForeignKey("maintenance_cycles.id"), nullable=False)
+    task_id = Column(String(36), ForeignKey("tasks.id"), nullable=False)
 
     status = Column(String(20), default="pending")  # pending, completed, skipped
     notes = Column(Text)

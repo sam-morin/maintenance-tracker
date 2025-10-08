@@ -32,12 +32,12 @@ def create_cycle_for_company(db: Session, company: models.Company, frequency: mo
     start_date, end_date = get_cycle_dates(frequency, reference_date)
 
     existing = (
-        db.query(models.MaintenanceCycles)
+        db.query(models.MaintenanceCycle)
         .filter(
-            models.MaintenanceCycles.company_id == company.id,
-            models.MaintenanceCycles.start_date == start_date,
-            models.MaintenanceCycles.end_date == end_date,
-            models.MaintenanceCycles.frequency == frequency,
+            models.MaintenanceCycle.company_id == company.id,
+            models.MaintenanceCycle.start_date == start_date,
+            models.MaintenanceCycle.end_date == end_date,
+            models.MaintenanceCycle.frequency == frequency,
         )
         .first()
     )
@@ -45,7 +45,7 @@ def create_cycle_for_company(db: Session, company: models.Company, frequency: mo
         return existing
 
     # Create new cycle
-    new_cycle = models.MaintenanceCycles(
+    new_cycle = models.MaintenanceCycle(
         company_id=company.id,
         start_date=start_date,
         end_date=end_date,
@@ -57,7 +57,7 @@ def create_cycle_for_company(db: Session, company: models.Company, frequency: mo
 
     # Create TaskInstances
     for assignment in company.assignments:
-        instance = models.TaskInstances(
+        instance = models.TaskInstance(
             assignment_id=assignment.id,
             cycle_id=new_cycle.id,
             status="pending",

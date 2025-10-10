@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import CompaniesTable from './CompaniesTable';
 import CompanyDashboard from './CompanyDashboard';
 import MainDashboard from './MainDashboard';
+import './App.css';
 
 function App() {
   const [companies, setCompanies] = useState([]);

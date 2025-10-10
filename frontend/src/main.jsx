@@ -6,8 +6,13 @@ import { MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css';
 import { BrowserRouter } from "react-router-dom";
 
+const theme = {
+  colorScheme: 'light',
+  fontFamily: 'Poppins, sans-serif',
+};
+
 createRoot(document.getElementById('root')).render(
-  <MantineProvider withGlobalStyles withNormalizeCSS>
+  <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
     <BrowserRouter>
       <App />
     </BrowserRouter>

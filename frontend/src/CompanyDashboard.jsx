@@ -1,5 +1,7 @@
-import { Box, Button, Center, Group, Loader, Modal, Stack, Text, TextInput, Title } from "@mantine/core";
+import { ActionIcon, Box, Button, Center, Container, Group, Loader, Modal, Stack, Text, TextInput, Title, Tooltip } from "@mantine/core";
 import { useEffect, useState } from "react";
+import MaintenanceTable from "./components/MaintenanceTable";
+import { IconArrowLeft, IconPencil, IconTrash } from "@tabler/icons-react";
 
 export default function CompanyDashboard() {
 	const companyID = window.location.pathname.split("/")[2];
@@ -148,47 +150,56 @@ export default function CompanyDashboard() {
 				</Center>
 			) : (
 				<div style={{ padding: "1rem" }}>
-					<Group>
-						<Stack>
-							<Button
-								variant="filled"
-								color="grey"
-								onClick={() => {
-									window.location.href = "/companies";
-								}}
-							>
-								Back
-							</Button>
-							{company.last_updated &&
-								<Button
-									variant="filled"
+					<Stack gap={"xs"}>
+						<Group>
+							<Group>
+								<ActionIcon
+									variant="subtle"
 									color="grey"
 									onClick={() => {
-										setEditCompanyModalOpen(true);
+										window.location.href = "/companies";
 									}}
 								>
-									Edit
-								</Button>
-							}
-							{company.last_updated &&
-								<Button
-									variant="filled"
-									color="red"
-									onClick={() => {
-										setDeleteCompanyModalOpen(true);
-									}}
-								>
-									Delete
-								</Button>
-							}
-						</Stack>
-						<Box>
-							<Text size="xs" c={"dimmed"}>{company.id}</Text>
+									<IconArrowLeft />
+								</ActionIcon>
+								{company.last_updated &&
+									<ActionIcon
+										variant="subtle"
+										color="grey"
+										onClick={() => {
+											setEditCompanyModalOpen(true);
+										}}
+									>
+										<IconPencil />
+									</ActionIcon>
+								}
+								{company.last_updated &&
+									<ActionIcon
+										variant="subtle"
+										color="red"
+										onClick={() => {
+											setDeleteCompanyModalOpen(true);
+										}}
+									>
+										<IconTrash />
+									</ActionIcon>
+								}
+							</Group>
 							<Title order={1}>{company.name}</Title>
+						</Group>
+
+						<Group>
 							<Text>{company.address}</Text>
 							<Text>{company.point_of_contact}</Text>
-						</Box>
-					</Group>
+							<Tooltip label={company.id}>
+								<Text size="xs" c={"dimmed"}>{company.id.slice(-6)}</Text>
+							</Tooltip>
+						</Group>
+					</Stack>
+
+					<Container size="100%" py="md">
+						<MaintenanceTable />
+					</Container>
 				</div>
 			)}
 		</div>
